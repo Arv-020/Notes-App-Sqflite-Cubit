@@ -1,23 +1,31 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 
 import '../models/notes_model.dart';
 
-class NotesData extends ValueNotifier<List<NotesModel>> {
-  NotesData._instance() : super([]);
-  static final NotesData _noteInstance = NotesData._instance();
-  factory NotesData() => _noteInstance;
-  int get length => value.length;
+class NotesProvider extends ChangeNotifier {
+  // named constructor
+  NotesProvider._instance();
+  static final NotesProvider _noteInstance = NotesProvider._instance();
+  factory NotesProvider() => _noteInstance;
+
+  //list of notes
+  final List<NotesModel> _items = [];
+  UnmodifiableListView<NotesModel> get items => UnmodifiableListView(_items);
+
+  //number of notes
+  int get length => items.length;
 
   void addNote(NotesModel note) {
-    value.add(note);
+    _items.add(note);
     notifyListeners();
   }
 
-  int id = 1;
   void removeNote(NotesModel note) {
-    value.add(note);
+    _items.remove(note);
     notifyListeners();
   }
 
-  NotesModel? getIndex(int index) => value[index];
+  NotesModel? getNote(int index) => _items[index];
 }

@@ -3,12 +3,38 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:notes/constants/constants.dart';
 import 'package:notes/models/notes_model.dart';
+import 'package:provider/provider.dart';
+import 'package:unicons/unicons.dart';
 
-class AddNoteScreen extends StatelessWidget {
-  AddNoteScreen({super.key});
-  final TextEditingController titleEditingController = TextEditingController();
-  final TextEditingController descEditingController = TextEditingController();
-  final NotesData notes = NotesData();
+class AddNoteScreen extends StatefulWidget {
+  const AddNoteScreen({
+    super.key,
+  });
+
+  @override
+  State<AddNoteScreen> createState() => _AddNoteScreenState();
+}
+
+class _AddNoteScreenState extends State<AddNoteScreen> {
+  late final TextEditingController titleEditingController;
+
+  late final TextEditingController descEditingController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    titleEditingController = TextEditingController();
+    descEditingController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    titleEditingController.dispose();
+    descEditingController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,12 +117,11 @@ class AddNoteScreen extends StatelessWidget {
                       DateTime now = DateTime.now();
                       final formattedDate =
                           DateFormat('MMM, d yyyy').format(now);
-                      notes.addNote(NotesModel(
-                          id: notes.id,
+                      context.read<NotesProvider>().addNote(NotesModel(
                           time: formattedDate,
                           title: titleEditingController.text.toString().trim(),
                           desc: descEditingController.text.toString().trim()));
-                      notes.id++;
+
                       Navigator.pop(context);
                     }
                   },
@@ -122,6 +147,7 @@ class AddNoteScreen extends StatelessWidget {
             flex: 1,
             child: SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextField(
                     controller: titleEditingController,
@@ -149,6 +175,7 @@ class AddNoteScreen extends StatelessWidget {
                   ),
                   TextField(
                     controller: descEditingController,
+
                     style: GoogleFonts.montserrat(
                         color: Colors.grey.withOpacity(0.9), fontSize: 20),
                     cursorColor: Colors.white,

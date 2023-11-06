@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:notes/home_page.dart';
-// import 'package:notes/list_tile.dart';
-import 'package:notes/splash_screen.dart';
+import 'package:notes/screens/home_page.dart';
+
+import 'package:provider/provider.dart';
+
+import 'constants/constants.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,6 +14,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: HomePage());
+    return ChangeNotifierProvider(
+        create: (_) => NotesProvider(),
+        child: const MaterialApp(
+            debugShowCheckedModeBanner: false, home: HomePage()));
   }
 }
