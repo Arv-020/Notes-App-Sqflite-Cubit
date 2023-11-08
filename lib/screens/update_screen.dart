@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:notes/constants/constants.dart';
+import 'package:notes/controller/app_controllers.dart';
+import 'package:notes/controller/app_database_provider.dart';
 import 'package:notes/models/notes_model.dart';
 import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
 
+DateTime now = DateTime.now();
+final formattedDate = DateFormat('MMM, d yyyy').format(now);
+
 class UpdateNoteScreen extends StatefulWidget {
   const UpdateNoteScreen({
     super.key,
+    required this.desc,
+    required this.title,
+    required this.date,
+    required this.id,
   });
-
+  final String title;
+  final String date;
+  final String desc;
+  final int id;
   @override
   State<UpdateNoteScreen> createState() => _UpdateNoteScreenState();
 }
@@ -19,13 +30,17 @@ class _UpdateNoteScreenState extends State<UpdateNoteScreen> {
   late final TextEditingController titleEditingController;
 
   late final TextEditingController descEditingController;
-  bool isVisible = false;
+  late bool isVisible;
+  late String date;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     titleEditingController = TextEditingController();
     descEditingController = TextEditingController();
+    titleEditingController.text = widget.title;
+    descEditingController.text = widget.desc;
+    date = widget.date;
   }
 
   @override
@@ -38,6 +53,8 @@ class _UpdateNoteScreenState extends State<UpdateNoteScreen> {
 
   @override
   Widget build(BuildContext context) {
+    isVisible = context.watch<AppControllerProvider>().isVisibile;
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -78,8 +95,17 @@ class _UpdateNoteScreenState extends State<UpdateNoteScreen> {
                 isVisible
                     ? InkWell(
                         onTap: () {
-                          isVisible = false;
-                          setState(() {});
+                          context.read<AppDataBaseProvider>().updateNote(
+                              NotesModel(
+                                  time: formattedDate,
+                                  title: titleEditingController.text.toString(),
+                                  desc: descEditingController.text.toString(),
+                                  id: widget.id));
+                          context
+                              .read<AppControllerProvider>()
+                              .changeVisibility();
+
+                          date = formattedDate;
                         },
                         child: Container(
                           width: 50,
@@ -98,8 +124,9 @@ class _UpdateNoteScreenState extends State<UpdateNoteScreen> {
                       )
                     : InkWell(
                         onTap: () {
-                          isVisible = true;
-                          setState(() {});
+                          context
+                              .read<AppControllerProvider>()
+                              .changeVisibility();
                         },
                         child: Container(
                           width: 50,
@@ -155,7 +182,7 @@ class _UpdateNoteScreenState extends State<UpdateNoteScreen> {
                     padding: const EdgeInsets.only(left: 35.0),
                     child: Text(
                       // widget.date,
-                      "heelo",
+                      date,
                       style: GoogleFonts.mPlus1(
                         fontSize: 16,
                         color: Colors.grey.shade800.withOpacity(1),

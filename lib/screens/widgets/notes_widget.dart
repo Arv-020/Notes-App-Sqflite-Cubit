@@ -1,30 +1,43 @@
-import 'dart:math';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
-import 'package:notes/constants/constants.dart';
-import 'package:notes/screens/add_notes_screen.dart';
+import 'package:notes/controller/app_database_provider.dart';
 import 'package:notes/screens/update_screen.dart';
 import 'package:provider/provider.dart';
-import 'dart:developer' as console show log;
 
-class NotesWidget extends StatelessWidget {
+class NotesWidget extends StatefulWidget {
   const NotesWidget({super.key});
 
   @override
+  State<NotesWidget> createState() => _NotesWidgetState();
+}
+
+class _NotesWidgetState extends State<NotesWidget> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getAllNotes();
+  }
+
+  void getAllNotes() async {
+    context.read<AppDataBaseProvider>().getAllNotes();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var notes = context.watch<NotesProvider>().items;
+    var notes = context.watch<AppDataBaseProvider>().items;
     return notes.isEmpty
         ? Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               // mainAxisAlignment: MainAxisAlignment.,
               children: [
-                Lottie.network(
-                  "https://lottie.host/9439805d-4618-471c-8943-eda4dd79e0bb/YpGopBbgYL.json",
+                Lottie.asset(
+                  "assets/animation/no-notes.json",
                   height: 200,
                   frameRate: FrameRate(2),
                 ),
@@ -66,15 +79,19 @@ class NotesWidget extends StatelessWidget {
                           ),
                         ),
                         onDismissed: (direction) {
-                          context.read<NotesProvider>().removeNote(e);
+                          context.read<AppDataBaseProvider>().removeNote(e);
                         },
                         child: InkWell(
                           onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        const UpdateNoteScreen()));
+                                    builder: (context) => UpdateNoteScreen(
+                                          date: e.time,
+                                          title: e.title,
+                                          desc: e.desc,
+                                          id: e.id,
+                                        )));
                           },
                           child: Container(
                             decoration: BoxDecoration(
