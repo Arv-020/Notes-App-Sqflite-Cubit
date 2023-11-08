@@ -11,13 +11,13 @@ import 'package:unicons/unicons.dart';
 
 import 'widgets/notes_widget.dart';
 
-String noteColor = Colors
-    .primaries[Random().nextInt(Colors.primaries.length - 1)].shade300
-    .toString();
+String get noteColor =>
+    Colors.primaries[Random().nextInt(Colors.primaries.length - 1)].shade300
+        .toString();
 
 int get parsed => int.parse(actualColor);
 Color color = Color(parsed);
-String actualColor = noteColor.substring(6, 16);
+String get actualColor => noteColor.substring(6, 16);
 List<NotesModel> notes = [];
 
 class HomePage extends StatelessWidget {
@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(actualColor);
-    print(noteColor);
+    // print(noteColor);
     bool isVisible = context.watch<AppControllerProvider>().isSearchBarVisible;
     return Scaffold(
       backgroundColor: Colors.black,

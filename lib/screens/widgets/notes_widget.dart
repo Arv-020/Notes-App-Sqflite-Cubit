@@ -87,16 +87,13 @@ class _NotesWidgetState extends State<NotesWidget> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => UpdateNoteScreen(
-                                          date: e.time,
-                                          title: e.title,
-                                          desc: e.desc,
-                                          id: e.id,
+                                          note: e,
                                         )));
                           },
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(11),
-                              color: e.noteColor,
+                              color: Color(int.parse(e.noteColor!)),
                             ),
                             // margin: EdgeInsets.only(
                             //     left: index % 2 == 0 ? 20 : 0,

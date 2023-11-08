@@ -55,7 +55,7 @@ class AppDataBaseProvider extends ChangeNotifier {
 
     return openDatabase(dbPath, version: 1, onCreate: (db, _) {
       db.execute(
-          "Create Table $TABLE_NAME ($TABLE_ID integer primary key autoincrement, $TABLE_TITLE text not null,$TABLE_DESC text,$TABLE_DATE text not null)");
+          "Create Table $TABLE_NAME ($TABLE_ID integer primary key autoincrement,$TABLE_COLOR text not null, $TABLE_TITLE text not null,$TABLE_DESC text,$TABLE_DATE text not null)");
     });
   }
 

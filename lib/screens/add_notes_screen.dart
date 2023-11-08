@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:notes/controller/app_database_provider.dart';
 import 'package:notes/models/notes_model.dart';
+import 'package:notes/screens/home_page.dart';
 import 'package:notes/screens/update_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -114,11 +115,12 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                           });
                     } else {
                       context.read<AppDataBaseProvider>().addNote(NotesModel(
+                          noteColor: actualColor,
                           id: 1,
                           time: formattedDate,
                           title: titleEditingController.text.toString().trim(),
                           desc: descEditingController.text.toString().trim()));
-
+                      FocusManager.instance.primaryFocus?.unfocus();
                       Navigator.pop(context);
                     }
                   },

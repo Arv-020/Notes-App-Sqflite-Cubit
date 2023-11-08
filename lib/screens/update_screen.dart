@@ -13,15 +13,9 @@ final formattedDate = DateFormat('MMM, d yyyy').format(now);
 class UpdateNoteScreen extends StatefulWidget {
   const UpdateNoteScreen({
     super.key,
-    required this.desc,
-    required this.title,
-    required this.date,
-    required this.id,
+    required this.note,
   });
-  final String title;
-  final String date;
-  final String desc;
-  final int id;
+  final NotesModel note;
   @override
   State<UpdateNoteScreen> createState() => _UpdateNoteScreenState();
 }
@@ -38,9 +32,9 @@ class _UpdateNoteScreenState extends State<UpdateNoteScreen> {
     super.initState();
     titleEditingController = TextEditingController();
     descEditingController = TextEditingController();
-    titleEditingController.text = widget.title;
-    descEditingController.text = widget.desc;
-    date = widget.date;
+    titleEditingController.text = widget.note.title;
+    descEditingController.text = widget.note.desc;
+    date = widget.note.time;
   }
 
   @override
@@ -53,7 +47,7 @@ class _UpdateNoteScreenState extends State<UpdateNoteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    isVisible = context.watch<AppControllerProvider>().isVisibile;
+    isVisible = context.watch<AppControllerProvider>().isVisible;
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -74,6 +68,7 @@ class _UpdateNoteScreenState extends State<UpdateNoteScreen> {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(12),
                     onTap: () {
+                      context.read<AppControllerProvider>().setFalse();
                       Navigator.pop(context);
                     },
                     child: const Center(
@@ -97,13 +92,12 @@ class _UpdateNoteScreenState extends State<UpdateNoteScreen> {
                         onTap: () {
                           context.read<AppDataBaseProvider>().updateNote(
                               NotesModel(
+                                  noteColor: widget.note.noteColor,
                                   time: formattedDate,
                                   title: titleEditingController.text.toString(),
                                   desc: descEditingController.text.toString(),
-                                  id: widget.id));
-                          context
-                              .read<AppControllerProvider>()
-                              .changeVisibility();
+                                  id: widget.note.id));
+                          context.read<AppControllerProvider>().setFalse();
 
                           date = formattedDate;
                         },
@@ -124,9 +118,7 @@ class _UpdateNoteScreenState extends State<UpdateNoteScreen> {
                       )
                     : InkWell(
                         onTap: () {
-                          context
-                              .read<AppControllerProvider>()
-                              .changeVisibility();
+                          context.read<AppControllerProvider>().setTrue();
                         },
                         child: Container(
                           width: 50,

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:notes/controller/app_database_provider.dart';
 
@@ -8,18 +9,18 @@ Color get randomColor =>
 Color colorOfNote = randomColor;
 
 class NotesModel {
-  NotesModel({
-    required this.time,
-    required this.title,
-    required this.desc,
-    required this.id,
-  }) : noteColor = randomColor;
+  NotesModel(
+      {required this.time,
+      required this.title,
+      required this.desc,
+      required this.id,
+      this.noteColor});
   final String title;
   final String desc;
   final String time;
   final int id;
 
-  final Color noteColor;
+  String? noteColor;
 
   @override
   operator ==(covariant NotesModel other) {
@@ -31,6 +32,7 @@ class NotesModel {
 
   factory NotesModel.fromMap(Map<String, dynamic> data) {
     return NotesModel(
+        noteColor: data[AppDataBaseProvider.TABLE_COLOR],
         id: data[AppDataBaseProvider.TABLE_ID],
         time: data[AppDataBaseProvider.TABLE_DATE],
         title: data[AppDataBaseProvider.TABLE_TITLE],
@@ -39,6 +41,7 @@ class NotesModel {
 
   Map<String, dynamic> toMap() {
     return {
+      AppDataBaseProvider.TABLE_COLOR: noteColor,
       AppDataBaseProvider.TABLE_DATE: time,
       AppDataBaseProvider.TABLE_TITLE: title,
       AppDataBaseProvider.TABLE_DESC: desc

@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 
 class AppControllerProvider extends ChangeNotifier {
   //defines textfield visiblity
-  bool isVisibile = false;
+  bool isVisible = false;
 
-  void changeVisibility() {
-    isVisibile = !isVisibile;
+  void setTrue() {
+    isVisible = true;
+    notifyListeners();
+  }
+
+  void setFalse() {
+    isVisible = false;
     notifyListeners();
   }
 
