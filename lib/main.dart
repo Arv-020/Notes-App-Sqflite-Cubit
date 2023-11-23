@@ -4,7 +4,8 @@ import 'package:notes/screens/home_page.dart';
 
 import 'package:provider/provider.dart';
 
-import 'controller/app_database_provider.dart';
+import 'controller/app_db_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,14 +16,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-        providers: [
-          ChangeNotifierProvider<AppDataBaseProvider>(
-              create: (_) => AppDataBaseProvider()),
-          ChangeNotifierProvider<AppControllerProvider>(
-              create: (_) => AppControllerProvider()),
-        ],
-        child: const MaterialApp(
-            debugShowCheckedModeBanner: false, home: HomePage()));
+    return BlocProvider(
+      create: (context) => AppDataBaseProvider(),
+      child: ChangeNotifierProvider(
+          create: (_) => AppControllerProvider(),
+          child: const MaterialApp(
+              debugShowCheckedModeBanner: false, home: HomePage())),
+    );
   }
 }

@@ -1,15 +1,17 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notes/controller/app_db_state.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../models/notes_model.dart';
 
-class AppDataBaseProvider extends ChangeNotifier {
+class AppDataBaseProvider extends Cubit<NotesState> {
   // named constructor
-  AppDataBaseProvider._instance();
+  AppDataBaseProvider._instance() : super(LoadingState());
   static final AppDataBaseProvider _noteInstance =
       AppDataBaseProvider._instance();
   factory AppDataBaseProvider() => _noteInstance;
@@ -51,7 +53,7 @@ class AppDataBaseProvider extends ChangeNotifier {
   Future<Database> initDb() async {
     var getApplicationDirectory = await getApplicationDocumentsDirectory();
 
-    var dbPath = join(getApplicationDirectory.path, "notesDb");
+    var dbPath = join(getApplicationDirectory.path, "noteCubitDb");
 
     return openDatabase(dbPath, version: 1, onCreate: (db, _) {
       db.execute(
@@ -68,7 +70,6 @@ class AppDataBaseProvider extends ChangeNotifier {
       TABLE_NAME,
       note.toMap(),
     );
-
     getAllNotes();
   }
 
@@ -94,18 +95,20 @@ class AppDataBaseProvider extends ChangeNotifier {
       notes.add(NotesModel.fromMap(element));
     }
     _items = notes;
-
-    notifyListeners();
+    emit(LoadedState(notes: List.from(_items)));
   }
 
   void foundNotes(String title, BuildContext context) {
+    List<NotesModel> list = [];
     if (title.isEmpty) {
       getAllNotes();
     } else {
-      _items =
-          _items.where((element) => element.title.contains(title)).toList();
+      list = _items
+          .where((element) =>
+              element.title.toLowerCase().contains(title.toLowerCase()))
+          .toList();
     }
-    notifyListeners();
+    emit(LoadedState(notes: List.from(list)));
   }
   //getnote by index
   // NotesModel? getNote(int index) => _items[index];

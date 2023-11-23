@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:notes/controller/app_database_provider.dart';
+import 'package:notes/controller/app_db_cubit.dart';
 
 Color get randomColor =>
     Colors.primaries[Random().nextInt(Colors.primaries.length - 1)].shade300;

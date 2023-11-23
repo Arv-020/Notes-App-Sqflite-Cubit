@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:notes/controller/app_database_provider.dart';
+import 'package:notes/controller/app_db_cubit.dart';
 import 'package:notes/models/notes_model.dart';
 import 'package:notes/screens/home_page.dart';
 import 'package:notes/screens/update_screen.dart';
