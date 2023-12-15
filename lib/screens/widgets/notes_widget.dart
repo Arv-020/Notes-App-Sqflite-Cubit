@@ -69,7 +69,7 @@ class _NotesWidgetState extends State<NotesWidget> {
                         .map(
                           (e) => StaggeredGridTile.fit(
                             // axisDirection: AxisDirection.right,
-                            crossAxisCellCount: e.title.length > 100 ? 2 : 1,
+                            crossAxisCellCount: e.desc.length > 100 ? 2 : 1,
                             child: Dismissible(
                               key: ValueKey(e.id),
                               dragStartBehavior: DragStartBehavior.start,
@@ -130,6 +130,23 @@ class _NotesWidgetState extends State<NotesWidget> {
                                               fontWeight: e.title.length > 100
                                                   ? FontWeight.w700
                                                   : FontWeight.w500),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 20.0),
+                                        child: Text(
+                                          e.desc,
+                                          maxLines: 2,
+                                          style: GoogleFonts.mPlus1(
+                                              fontSize:
+                                                  e.desc.length > 100 ? 22 : 18,
+                                              fontWeight: e.title.length > 100
+                                                  ? FontWeight.w400
+                                                  : FontWeight.w300),
                                         ),
                                       ),
                                       const SizedBox(
